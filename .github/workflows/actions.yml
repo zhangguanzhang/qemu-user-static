@@ -1,4 +1,8 @@
 name: actions
+
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -18,8 +22,8 @@ jobs:
   qemu-user-static:
     runs-on: ubuntu-latest
     env:
-      VERSION: 7.2.0-1
-      ORIGIN_VERSION: 7.2+dfsg-1~bpo11+2
+      VERSION: 10.0.6-1
+      ORIGIN_VERSION: 10.0.6
     steps:
       - uses: actions/checkout@v2
       - name: Set variables
@@ -27,9 +31,13 @@ jobs:
           echo "DOCKER_REPO=docker.io/$GITHUB_REPOSITORY" >> $GITHUB_ENV
       - name: Build
         run: |
-          wget --content-disposition http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_${{ env.ORIGIN_VERSION }}_amd64.deb
-          dpkg-deb -R qemu-user-static_*.deb releases
+          base_url=http://ftp.de.debian.org/debian/pool/main/q/qemu/
+          file_name=$(curl -sSL $base_url | grep -Po '>\Kqemu-user_.+amd64.deb' | grep -m1 -F ${{ env.ORIGIN_VERSION }} )
+          wget --content-disposition ${base_url}${file_name}
+          dpkg-deb -R qemu-user_*.deb releases
           ./run.sh -t "${{ env.VERSION }}" -r "${{ env.GITHUB_REPOSITORY }}" -d "${{ env.DOCKER_REPO }}"
+      - name: list images
+        run: docker images
       - name: Test
         run: ./test.sh -d "${{ env.DOCKER_REPO }}"
       - name: Publish
