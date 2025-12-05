@@ -34,7 +34,7 @@ jobs:
           base_url=http://ftp.de.debian.org/debian/pool/main/q/qemu/
           file_name=$(curl -sSL $base_url | grep -Po '>\Kqemu-user_.+amd64.deb' | grep -m1 -F ${{ env.ORIGIN_VERSION }} )
           wget --content-disposition ${base_url}${file_name}
-          dpkg-deb -R qemu-user_*.deb releases
+          dpkg-deb -R qemu-user*.deb releases
           ./run.sh -t "${{ env.VERSION }}" -r "${{ env.GITHUB_REPOSITORY }}" -d "${{ env.DOCKER_REPO }}"
       - name: list images
         run: docker images

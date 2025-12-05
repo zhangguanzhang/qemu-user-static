@@ -54,8 +54,11 @@ do
         if [ "$from_arch" != "$to_arch" ]; then
             work_dir="${out_dir}/${from_arch}_qemu-${to_arch}-static"
             mkdir -p "${work_dir}"
-            cp -p "${releases_dir}qemu-${to_arch}" ${work_dir}/qemu-${to_arch}-static
-            cp -p "${releases_dir}qemu-${to_arch}" "${out_dir}/latest/qemu-${to_arch}-static"
+            if [ ! -f "${releases_dir}qemu-${to_arch}-static" ] && [ -f "${releases_dir}qemu-${to_arch}" ];then
+                cp "${releases_dir}qemu-${to_arch}" "${releases_dir}qemu-${to_arch}-static"
+            fi
+            cp -p "${releases_dir}qemu-${to_arch}-static" ${work_dir}/
+            cp -p "${work_dir}/qemu-${to_arch}-static" "${out_dir}/latest/"
             cat > ${work_dir}/Dockerfile -<<EOF
 FROM scratch
 COPY qemu-${to_arch}-static /usr/bin/

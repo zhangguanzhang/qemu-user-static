@@ -47,7 +47,7 @@ ls: cannot access '/proc/sys/fs/binfmt_misc/qemu-aarch64': No such file or direc
 $ docker run --rm -t arm64v8/ubuntu uname -m
 standard_init_linux.go:211: exec user process caused "exec format error"
 
-$ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+$ docker run --rm --privileged zhangguanzhang/qemu-user-static --reset -p yes
 
 $ ls /proc/sys/fs/binfmt_misc/qemu-aarch64
 /proc/sys/fs/binfmt_misc/qemu-aarch64
@@ -86,8 +86,8 @@ First, we describe the entire pipelne system's input and output. `.github/workfl
 
 * Input of the pipeline: `qemu-user-static-X.Y.Z-R.fcNN.$arch.rpm` RPM file under [Fedora Project URL](https://kojipkgs.fedoraproject.org/packages/qemu). Right now `$arch` is only x86_64.
 * Output of the pipeline:
-  * [GitHub Releases page](https://github.com/multiarch/qemu-user-static/releases): `qemu-$arch-static` binary files, `qemu-$arch-static.tar.gz` and `x86_64_qemu-$arch-static.tar.gz` (`$from_arch_qemu-$arch-statc.tar.gz`). `qemu-$arch-static.tar.gz` files are same content with `x86_64_qemu-$arch-static.tar.gz`. It is an implementation to add supported host architectures `$from_arch` in the future.
-  * Images on [Docker Hub](https://hub.docker.com/r/multiarch/qemu-user-static/). For actual images, see `README.md` Usage - multiarch/qemu-user-static images section.
+  * [GitHub Releases page](https://github.com/zhangguanzhang/qemu-user-static/releases): `qemu-$arch-static` binary files, `qemu-$arch-static.tar.gz` and `x86_64_qemu-$arch-static.tar.gz` (`$from_arch_qemu-$arch-statc.tar.gz`). `qemu-$arch-static.tar.gz` files are same content with `x86_64_qemu-$arch-static.tar.gz`. It is an implementation to add supported host architectures `$from_arch` in the future.
+  * Images on [Docker Hub](https://hub.docker.com/r/zhangguanzhang/qemu-user-static/). For actual images, see `README.md` Usage - zhangguanzhang/qemu-user-static images section.
 
 Second, we describe each program's input and output by sequence.
 
@@ -97,7 +97,7 @@ Second, we describe each program's input and output by sequence.
 | 2 | `publish.sh` | Upload the tar.gz files by [GitHub API](https://developer.github.com/) | `qemu-$arch-static.tar.gz` and `x86_64_qemu-$arch-static.tar.gz` files | `qemu-$arch-static.tar.gz` and `x86_64_qemu-$arch-static.tar.gz` files on GitHub Releases page. |
 | 3 | `update.sh` | Create container images on local | `x86_64_qemu-$arch-static.tar.gz` files on GitHub Releases page. | Container images on local |
 | 4 | `test.sh` | Test created container images on local | Container images on local | `test/*` container images created as a result of tests  |
-| 5 | `docker push $DOCKER_REPO` | Push the container images to DockerHub | `multiarch/qemu-user-static:*` container images on local | `multiarch/qemu-user-static:*` container images on Docker Hub |
+| 5 | `docker push $DOCKER_REPO` | Push the container images to DockerHub | `zhangguanzhang/qemu-user-static:*` container images on local | `zhangguanzhang/qemu-user-static:*` container images on Docker Hub |
 
 ## References
 

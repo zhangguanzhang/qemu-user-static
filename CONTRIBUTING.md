@@ -1,15 +1,15 @@
-# Contributing to multiarch/qemu-user-static
+# Contributing to zhangguanzhang/qemu-user-static
 
 Your contributions such as reporting a bug and sending pull-request are very wellcome! Thank you.
 
 ## Did you find a bug?
 
 * Ensure the bug was not already reported by searching on GitHub under Issues.
-* multiarch/qemu-user-static is a collection of containers to enable people to emulate multi-architecture containers by using qemu-user-static (= a collection of QEMU's user mode static binaries `qemu-$arch-static`) [1] and binfmt_misc [2]. This repository is not QEMU project's one. If you find a bug about them, you can visit the website [1][2] to report an issue on the projects.
+* zhangguanzhang/qemu-user-static is a collection of containers to enable people to emulate multi-architecture containers by using qemu-user-static (= a collection of QEMU's user mode static binaries `qemu-$arch-static`) [1] and binfmt_misc [2]. This repository is not QEMU project's one. If you find a bug about them, you can visit the website [1][2] to report an issue on the projects.
 
 ## How to send pull-request
 
-1. Fork the repository: https://github.com/multiarch/qemu-user-static . Ex. https://github.com/junaruga/qemu-user-static
+1. Fork the repository: https://github.com/zhangguanzhang/qemu-user-static . Ex. https://github.com/junaruga/qemu-user-static
 2. This repository is using Github Actions. You can test your modified code on your forked repository before sending a pull-requeste.
 3. If you want to test pushing created container images,
     * You need to have your own container repository such as DockerHub or Quay.io. Ex. https://quay.io/repository/junaruga/qemu-user-static
