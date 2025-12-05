@@ -35,6 +35,7 @@ for file in *; do
     tar -czf $file.tar.gz $file;
     cp $file.tar.gz x86_64_$file.tar.gz
 done
+ls -l
 cd ${root_dir}
 
 # Generate register files.
@@ -45,12 +46,18 @@ sed -i '/^COPY qemu/ s/^/#/' "${out_dir}/register/Dockerfile"
 
 for file in ${releases_dir}*
 do
-    if [[ $file =~ qemu-(.+)-static ]]; then
+    if [[ $file =~ tar.gz$ ]];then
+        continue
+    fi
+    if [[ $file =~ qemu-(.+)$ ]]; then
         to_arch=${BASH_REMATCH[1]}
         if [ "$from_arch" != "$to_arch" ]; then
-            work_dir="${out_dir}/${from_arch}_qemu-${to_arch}"
+            work_dir="${out_dir}/${from_arch}_qemu-${to_arch}-static"
             mkdir -p "${work_dir}"
-            cp -p "${releases_dir}qemu-${to_arch}-static" ${work_dir}
+            if [ ! -f "${releases_dir}qemu-${to_arch}-static" ] && [ -f "${releases_dir}qemu-${to_arch}" ];then
+                cp "${releases_dir}qemu-${to_arch}" "${releases_dir}qemu-${to_arch}-static"
+            fi
+            cp -p "${releases_dir}qemu-${to_arch}-static" ${work_dir}/
             cp -p "${work_dir}/qemu-${to_arch}-static" "${out_dir}/latest/"
             cat > ${work_dir}/Dockerfile -<<EOF
 FROM scratch
